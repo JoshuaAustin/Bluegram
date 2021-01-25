@@ -1,18 +1,20 @@
 import java.io.*;
-public class BifidCipher {
+
+class BifidCipher {
     public static void main(String Args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        java.lang.String s;
+        java.lang.String s, S1;
         System.out.print("Enter a String  :\n");
-        s = br.readLine();
-        int l = s.length();
-        char a[][] = new char[5][5];
+        S1 = br.readLine();
+        s = S1.toUpperCase();       //convert all to uppercase
+        int l = s.length();         //length of string
         char base[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-        char b[][] = new char[5][5];
         char copy[] = base;
-        int key[][] = new int[2][l];
-        for (int i = 0; i < 50; i++) {
-            double Y = (Math.random() * 25);
+        char a[][] = new char[5][5];        //array to store the key
+        int key[][] = new int[2][l];        //array to store numbers after searching key
+        for (int i = 0; i < 50; i++)
+        {
+            double Y = (Math.random() * 25);          //using loop to generate two random column numbers and switch places
             int y = (int) Y;
             double Z = (Math.random() * 25);
             int z = (int) Z;
@@ -21,18 +23,20 @@ public class BifidCipher {
             copy[z] = t;
         }
         int ptr = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                b[i][j] = copy[ptr];
+        for (int i = 0; i < 5; i++)            //use loop t store the new key in 2d array
+        {
+            for (int j = 0; j < 5; j++)
+            {
+                a[i][j] = copy[ptr];
                 ptr++;
             }
         }
         System.out.println("Key:");
-        for(int i=0; i<5; i++)
+        for(int i=0; i<5; i++)                 //print the key
         {
             for(int j=0; j<5; j++)
             {
-                System.out.print(b[i][j]+" ");
+                System.out.print(a[i][j]+" ");
             }
             System.out.println();
         }
@@ -40,7 +44,7 @@ public class BifidCipher {
         for(int i=0; i<l; i++)
         {
             char x=s.charAt(i);
-            if(x=='J')
+            if(x=='J')                          // J and I are considered same because of 25 char limit
             {
                 x='I';
             }
@@ -48,7 +52,7 @@ public class BifidCipher {
             {
                 for(int k=0; k<5; k++)
                 {
-                    if(x==b[j][k])
+                    if(x==a[j][k])
                     {
                         key[0][i]=j;
                         key[1][i]=k;
@@ -65,7 +69,7 @@ public class BifidCipher {
             }
             System.out.println();
         }
-        int n=2*l;
+        int n=2*l;         //each character will have two integers   a=32
         int key2[]=new int[n];
         int point=0;
         for(int i=0; i<2; i++)
@@ -79,14 +83,14 @@ public class BifidCipher {
         System.out.println("1D Key");
         for(int i=0; i<n; i++)
         {
-            System.out.print(key2[i]+" ");
+            System.out.print(key2[i]+" ");        //new key
         }
         System.out.println();
         char Mes[]=new char[l];
         int o=0;
         for(int i=0; i<n; i++)
         {
-            Mes[o]=b[key2[i]][key2[i+1]];
+            Mes[o]=a[key2[i]][key2[i+1]];             //consecutive char with the new key
             o++;
             i++;
         }
