@@ -1,0 +1,113 @@
+import java.io.*;
+
+class TrifidCipher {
+    public static void main(String Args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        java.lang.String s, S1;
+        System.out.print("Enter a String  :\n");
+        S1 = br.readLine();
+        s = S1.toUpperCase();       //convert all to uppercase
+        int l = s.length();         //length of string
+        char base[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        char copy[] = base;
+        char a[][][] = new char[3][3][3];        //array to store the key
+        int key[][] = new int[3][l];        //array to store numbers after searching key
+        for (int i = 0; i < 50; i++)
+        {
+            double Y = (Math.random() * 26);          //using loop to generate two random column numbers and switch places
+            int y = (int) Y;
+            double Z = (Math.random() * 26);
+            int z = (int) Z;
+            char t = copy[y];
+            copy[y] = copy[z];
+            copy[z] = t;
+        }
+        int ptr = 0;
+        for (int i = 0; i < 3; i++)            //use loop t store the new key in 3d array
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                for (int k=0; k<3; k++) {
+                    if(ptr==26)
+                        a[i][j][k]=5;
+                    else
+                        a[i][j][k] = copy[ptr];
+                    ptr++;
+                }
+            }
+        }
+        System.out.println("Key:");
+        for(int i=0; i<3; i++)                 //print the key
+        {
+            for(int j=0; j<3; j++)
+            {
+                for(int k=0; k<3; k++)
+                {
+                    System.out.print(a[i][j][k]+" ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+        System.out.println("Length :"+l);
+        for(int i=0; i<l; i++)
+        {
+            char x=s.charAt(i);
+            for(int j=0; j<3; j++)
+            {
+                for(int k=0; k<3; k++)
+                {
+                    for(int m=0; m<3; m++)
+                    {
+                        if(x==a[j][k][m])
+                        {
+                            key[0][i]=j;
+                            key[1][i]=k;
+                            key[2][i]=m;
+
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println("Numbers after searching Key:");
+        for(int i=0; i<3; i++)
+        {
+            for(int j=0; j<l; j++)
+            {
+                System.out.print(key[i][j]+" ");
+            }
+            System.out.println();
+        }
+        int n=3*l;         //each character will have three integers   a=321
+        int key2[]=new int[n];
+        int point=0;
+        for(int i=0; i<3; i++)
+        {
+            for (int j=0; j<l; j++)
+            {
+                key2[point]=key[i][j];
+                point++;
+            }
+        }
+        System.out.println("1D Key");
+        for(int i=0; i<n; i++)
+        {
+            System.out.print(key2[i]+" ");        //new key
+        }
+        System.out.println();
+        char Mes[]=new char[l];
+        int o=0;
+        for(int i=0; i<n; i++)
+        {
+            Mes[o]=a[key2[i]][key2[i+1]][key2[i+2]];             //consecutive char with the new key
+            o++;
+            i+=2;
+        }
+        System.out.print("Encoded Message   :");
+        for(int i=0; i<l; i++)
+        {
+            System.out.print(Mes[i]);
+        }
+    }
+}
